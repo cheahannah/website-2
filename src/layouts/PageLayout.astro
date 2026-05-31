@@ -16,6 +16,76 @@ const { title, description } = Astro.props;
 <html lang="en">
   <head>
     <Head title={`${title} | ${SITE.NAME}`} description={description} />
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Hannah Chea",
+        "givenName": "Hannah",
+        "familyName": "Chea",
+        "additionalName": "谢慧宁",
+        "gender": "female",
+        "birthPlace": "Bakersfield, California, USA",
+        "workLocation": "San Francisco, California, USA",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "San Francisco",
+          "addressRegion": "CA",
+          "addressCountry": "USA"
+        },
+        "ethnicity": "Khmer-Chinese American",
+        "nationality": "American",
+        "url": "https://hannahchea.com",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/d/df/Hannah_Chea_headshot_%282024%29.jpg",
+        "sameAs": [
+          "https://www.linkedin.com/in/cheahannah/",
+          "https://www.instagram.com/xirimpi",
+          "https://github.com/cheahannah",
+          "https://www.tiktok.com/@xirimpi",
+          "https://www.youtube.com/@xirimpi",
+          "https://x.com/xirimpi",
+          "https://www.facebook.com/xirimpi",
+          "https://www.imdb.com/name/nm18331612/"
+        ],
+        "email": "mailto:xirimpi@gmail.com",
+        "jobTitle": "Content Creator",
+        "hasOccupation": [
+          {"@type": "Occupation", "name": "Content Creator", "description": "Produces engaging digital content for social media, websites, and online platforms, often focused on storytelling, education, entertainment, and brand building."},
+          {"@type": "Occupation", "name": "Host", "description": "Facilitates events, shows, or online content by engaging with audiences, guiding discussions, and creating an inviting atmosphere."},
+          {"@type": "Occupation", "name": "Performer", "description": "Engages in artistic expression through dance, theater, or other performance arts to entertain and connect with audiences."}
+        ],
+        "description": "Creator, performer, and host in San Francisco sharing Bay Area culture, Chinatown history, food, fashion, and Khmer diaspora experiences. Miss San Francisco Chinatown 2025.",
+        "knowsAbout": [
+          "Data Analysis",
+          "Content Creation",
+          "Social Media Marketing",
+          "Hosting",
+          "Presenting",
+          "Khmer Culture",
+          "Khmer Dance",
+          "Fashion Design",
+          "Modeling",
+          "San Francisco Culture",
+          "Chinatown",
+          "Asian American History",
+          "Pageantry"
+        ],
+        "alumniOf": {
+          "@type": "CollegeOrUniversity",
+          "name": "University of California, Berkeley"
+        },
+        "award": "Miss San Francisco Chinatown 2025",
+        "performerIn": {
+          "@type": "TheaterEvent",
+          "name": "The Rebirth of Apsara: Beyond Genocide",
+          "description": "Charya Burt's dance/theatre production created to observe the 50th Anniversary of the beginning of the Khmer Rouge Genocide and to honor its survivors, the resilience of the Cambodian spirit, and to celebrate how Khmer arts has been and continues to be transmitted from generation to generation."
+        },
+        "memberOf": {
+          "@type": "Organization",
+          "name": "Market Street Railway"
+        }
+      }
+    </script>
   </head>
   <body>
     <Header />
