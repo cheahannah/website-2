@@ -1,7 +1,7 @@
 import type { Site, Metadata, Socials } from "@types";
 
 export const SITE: Site = {
-  NAME: "HANNAH CHEA",
+  NAME: "Hannah Chea",
   EMAIL: "xirimpi@gmail.com",
   NUM_POSTS_ON_HOMEPAGE: 0,
   NUM_WORKS_ON_HOMEPAGE: 0,
@@ -10,36 +10,46 @@ export const SITE: Site = {
 
 export const HOME: Metadata = {
   TITLE: "Home",
-  DESCRIPTION: "Astro Nano is a minimal and lightweight blog and portfolio.",
+  DESCRIPTION: "Hannah Chea's personal website to showcase her content creator and artist work.",
 };
 
-export const BLOG: Metadata = {
-  TITLE: "Blog",
-  DESCRIPTION: "A collection of articles on topics I am passionate about.",
+export const PORTFOLIO: Metadata = {
+  TITLE: "Portfolio",
+  DESCRIPTION: "Hannah Chea's collection of content creation, fashion design, and modeling work.",
 };
 
-export const WORK: Metadata = {
-  TITLE: "Work",
-  DESCRIPTION: "Where I have worked and what I have done.",
+export const PRESS: Metadata = {
+  TITLE: "Press",
+  DESCRIPTION: "Hannah Chea's appearances in media, interviews, and collaborations.",
 };
-
-export const PROJECTS: Metadata = {
-  TITLE: "Projects",
-  DESCRIPTION: "A collection of my projects, with links to repositories and demos.",
-};
-
 
 export const SOCIALS: Socials = [
   { 
-    NAME: "twitter-x",
-    HREF: "https://twitter.com/markhorn_dev",
+    NAME: "instagram",
+    HREF: "https://www.instagram.com/xirimpi",
   },
   { 
-    NAME: "github",
-    HREF: "https://github.com/markhorn-dev"
+    NAME: "tiktok",
+    HREF: "https://www.tiktok.com/@xirimpi"
+  },
+  {
+    NAME: "facebook",
+    HREF: "https://www.facebook.com/cheahannah", 
   },
   { 
+    NAME: "youtube",
+    HREF: "https://www.youtube.com/channel/UCNnSxa0u39kUHOBAl_F8Gjg", 
+  },
+  { 
+    NAME: "x",
+    HREF: "https://x.com/xirimpi", 
+  },
+  {
     NAME: "linkedin",
-    HREF: "https://www.linkedin.com/in/markhorn-dev",
+    HREF: "https://linkedin.com/in/cheahannah",
+  },
+  {
+    NAME: "email",
+    HREF: "mailto:xirimpi@gmail.com",
   }
 ];

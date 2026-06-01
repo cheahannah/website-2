@@ -1,8 +1,26 @@
 ---
 import Container from "@components/Container.astro";
-import { SITE } from "@consts";
+import { Icon } from "astro-icon/components";
+import { SITE, SOCIALS } from "@consts";
 import BackToTop from "@components/BackToTop.astro";
+
+const iconMap: Record<string, string> = {
+  instagram: "fa6-brands:instagram",
+  tiktok:    "fa6-brands:tiktok",
+  facebook:  "fa6-brands:facebook",
+  youtube:   "fa6-brands:youtube",
+  x:         "fa6-brands:x-twitter",
+  linkedin:  "fa6-brands:linkedin-in",
+  email:     "tabler:mail-filled",
+};
+
+const socialIcons = SOCIALS.map(social => ({
+  href: social.HREF,
+  icon: iconMap[social.NAME],
+}));
 ---
+
+
 
 <footer class="animate">
   <Container>
@@ -13,25 +31,41 @@ import BackToTop from "@components/BackToTop.astro";
     </div>
     <div class="flex justify-between items-center">
       <div>
-        &copy; 2024 {`|`} {SITE.NAME}
+        &copy; 2026 {SITE.NAME}
       </div>
       <div class="flex flex-wrap gap-1 items-center">
+        <!-- Social icons -->
+        {socialIcons.map((social) => (
+          <a
+            href={social.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center justify-center rounded-full"
+          >
+            <Icon name={social.icon} size={20} class="opacity-85 hover:opacity-55  duration-300 ease-in-out" />
+          </a>
+        ))}
+
+        <!-- Divider -->
+        <span class="w-px h-4 bg-current opacity-20 mx-1" />
+
+          <!-- Theme buttons -->
         <button
           id="light-theme-button"
           aria-label="Light theme"
-          class="group size-8 flex items-center justify-center rounded-full"
+          class="flex items-center justify-center rounded-full"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
+            width="20"
+            height="20"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             stroke-width="1.5"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="group-hover:stroke-black group-hover:dark:stroke-white transition-colors duration-300 ease-in-out"
+            class="opacity-100 hover:opacity-55  duration-300 ease-in-out"
           >
             <circle cx="12" cy="12" r="5"></circle>
             <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -47,19 +81,19 @@ import BackToTop from "@components/BackToTop.astro";
         <button
           id="dark-theme-button"
           aria-label="Dark theme"
-          class="group size-8 flex items-center justify-center rounded-full"
+          class="flex items-center justify-center rounded-full"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
+            width="20"
+            height="20"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             stroke-width="1.5"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="group-hover:stroke-black group-hover:dark:stroke-white transition-colors duration-300 ease-in-out"
+            class="opacity-100 hover:opacity-55  duration-300 ease-in-out"
           >
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
           </svg>
@@ -69,10 +103,10 @@ import BackToTop from "@components/BackToTop.astro";
           aria-label="System theme"
           class="group size-8 flex items-center justify-center rounded-full"
         >
-          <svg
+          <!-- <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
+            width="22"
+            height="22"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -84,7 +118,7 @@ import BackToTop from "@components/BackToTop.astro";
             <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
             <line x1="8" y1="21" x2="16" y2="21"></line>
             <line x1="12" y1="17" x2="12" y2="21"></line>
-          </svg>
+          </svg> -->
         </button>
       </div>
     </div>

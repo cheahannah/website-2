@@ -6,6 +6,23 @@ import ArrowCard from "@components/ArrowCard.astro";
 import Link from "@components/Link.astro";
 import { dateRange } from "@lib/utils";
 import { SITE, HOME, SOCIALS } from "@consts";
+import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
+
+const iconMap: Record<string, string> = {
+  instagram: "fa6-brands:instagram",
+  tiktok:    "fa6-brands:tiktok",
+  facebook:  "fa6-brands:facebook",
+  youtube:   "fa6-brands:youtube",
+  x:         "fa6-brands:x-twitter",
+  linkedin:  "fa6-brands:linkedin-in",
+  email:     "tabler:mail-filled",
+};
+
+const socialIcons = SOCIALS.map(social => ({
+  href: social.HREF,
+  icon: iconMap[social.NAME],
+}));
 
 /*
 const blog = (await getCollection("blog"))
@@ -33,27 +50,54 @@ const work = await Promise.all(
 
 <PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
   <Container>
-    <h1 class="animate font-semibold text-black dark:text-white">
-      Hi :) 
+     <section>
+        <Image
+          src="/profile.png"
+          alt="Profile photo"
+          class="animate rounded-full block lg:mt-5 mt-0 lg:mb-5 mb-10 mx-auto sm:float-right sm:ml-5 sm:mb-5 lg:mr-5"
+          width={200}
+          height={200}
+        />
+    </section>
+    <h1 class="animate font-bold text-black dark:text-white text-4xl">
+      Hi! 
       <p>I'm Hannah Chea.</p>
     </h1>
     <div class="space-y-16">
       <section>
-        <article class="space-y-4">
+        <article class="space-y-6">
           <p class="animate">
-            I'm a recent UC Berkeley graduate with a passion for data science, ethnic studies, and pop culture.
+             Based in San Francisco, CA, I am a proud eldest daughter of Chinese-Khmer refugees. My work lives at the intersection of culture and creativity — from the streets of Chinatown to the stories of the Khmer diaspora. 
           </p>
           <p class="animate">
-            Visit
-            <Link href="https://github.com/markhorn-dev/astro-nano" aria-label="Astro Nano on Github" external>
-              Astro Nano on Github.
-            </Link>
-            to fork the repository, read the docs or one-click deploy on Vercel or Netlify. 
+            I'm here to document, celebrate, and share what makes our communities worth knowing.
+          </p>
+          <p class="animate">
+            Check out my <Link href="https://beacons.ai/xirimpi/mediakit?origin=lib" aria-label="media kit" external>media kit</Link> here.
+            <br>Or send any inquiries to <Link href="mailto:xirimpi@gmail.com" aria-label="xirimpi@gmail.com" external>xirimpi@gmail.com</Link>.
           </p>
         </article>
+
+        <!-- Social Icons -->
+        <div class="animate flex flex-wrap gap-3 mt-6">
+          {socialIcons.map(social => (
+            <a
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group size-8 flex items-center justify-center rounded-full"
+            >
+              <Icon
+                name={social.icon}
+                size={25}
+                class="opacity-100 group-hover:opacity-55 transition-opacity duration-300"
+              />
+            </a>
+          ))}
+        </div>
       </section>
 
-      {/* 
+      <!-- 
       <section class="animate space-y-6">
         <div class="flex flex-wrap gap-y-2 items-center justify-between">
           <h5 class="font-semibold text-black dark:text-white">
@@ -118,33 +162,7 @@ const work = await Promise.all(
           ))}
         </ul>
       </section>
-      */}
-
-      <section class="animate space-y-4">
-        <h5 class="font-semibold text-black dark:text-white">
-          Please talk to me!
-        </h5>
-        <article>
-          <p>
-            Feel free to connect with me on social media or email!
-          </p>
-        </article>
-        <ul class="flex flex-wrap gap-2">
-          {SOCIALS.map(SOCIAL => (
-            <li class="flex gap-x-2 text-nowrap">
-              <Link href={SOCIAL.HREF} external aria-label={`${SITE.NAME} on ${SOCIAL.NAME}`}>
-                {SOCIAL.NAME}
-              </Link>
-              {"/"}
-            </li>
-          ))}
-          <li class="line-clamp-1">
-            <Link href={`mailto:${SITE.EMAIL}`} aria-label={`Email ${SITE.NAME}`}>
-              {SITE.EMAIL}
-            </Link>
-          </li>
-        </ul>
-      </section>
+       -->
     </div>
   </Container>
 </PageLayout>
