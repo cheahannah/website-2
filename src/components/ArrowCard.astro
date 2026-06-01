@@ -1,0 +1,42 @@
+---
+import type { CollectionEntry } from "astro:content";
+import FormattedDate from "@components/FormattedDate.astro";
+
+type Props = {
+  entry: CollectionEntry<"portfolio">;
+}
+
+const { entry } = Astro.props;
+const href = `/portfolio/${entry.id}`;
+---
+
+<a
+  href={href}
+  class="relative group flex items-center gap-3 p-4 rounded border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-colors duration-300 ease-in-out"
+>
+  <div class="flex-1 min-w-0">
+    <div class="flex items-center gap-2 mb-1">
+      <span class="font-semibold text-black dark:text-white truncate">
+        {entry.data.title}
+      </span>
+      {entry.data.date && (
+        <span class="text-xs opacity-60 shrink-0">
+          <FormattedDate date={entry.data.date} />
+        </span>
+      )}
+    </div>
+    {entry.data.description && (
+      <p class="text-sm opacity-70 line-clamp-2">
+        {entry.data.description}
+      </p>
+    )}
+  </div>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    class="shrink-0 size-4 stroke-2 fill-none stroke-current translate-x-0 group-hover:translate-x-1 transition-transform duration-300 ease-in-out"
+  >
+    <line x1="5" y1="12" x2="19" y2="12" />
+    <polyline points="12 5 19 12 12 19" />
+  </svg>
+</a>

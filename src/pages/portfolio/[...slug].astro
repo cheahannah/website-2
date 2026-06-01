@@ -8,18 +8,15 @@ import BackToPrev from "@components/BackToPrev.astro";
 import Link from "@components/Link.astro";
 
 export async function getStaticPaths() {
-  const projects = (await getCollection("projects"))
+  const projects = (await getCollection("portfolio"))
     .filter(post => !post.data.draft)
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
     return projects.map((project) => ({
-      // the collection entry doesn't expose `slug` on the entry object
-      // so provide the id in the params. For a catch-all route use an
-      // array for slug.
       params: { slug: [project.id] },
       props: project,
   }));
 }
-type Props = CollectionEntry<"projects">;
+type Props = CollectionEntry<"portfolio">;
 
 const project = Astro.props;
 const { Content } = await render(project);
@@ -28,8 +25,8 @@ const { Content } = await render(project);
 <PageLayout title={project.data.title} description={project.data.description}>
   <Container>
     <div class="animate">
-      <BackToPrev href="/projects">
-        Back to projects
+      <BackToPrev href="/portfolio">
+        Back to portfolio
       </BackToPrev>
     </div>
     <div class="space-y-1 my-10">
