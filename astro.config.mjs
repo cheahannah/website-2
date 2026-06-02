@@ -5,6 +5,6 @@ import tailwind from "@astrojs/tailwind";
 import icon from "astro-icon";
 
 export default defineConfig({
-  site: "https://astro-nano-demo.vercel.app",
+  site: "https://cheahannah.com",
   integrations: [mdx(), sitemap(), tailwind(), icon()],
 });
