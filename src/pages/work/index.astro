@@ -3,7 +3,8 @@ import PageLayout from "@layouts/PageLayout.astro";
 import Container from "@components/Container.astro";
 import BookingButton from "@components/BookingButton.astro";
 import ScrollRow from "@components/ScrollRow.astro";
-import { Image } from "astro:assets";
+import OutletMark from "@components/OutletMark.astro";
+import { Image, getImage } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import { WORK, SITE } from "@consts";
 
@@ -13,6 +14,10 @@ const thumbnailFor = (code: string) => thumbnails[`../../assets/work/${code}.jpg
 
 type Campaign = {
   brand: string;
+  // One-colour logo file(s) in public/logos.
+  logo: string | string[];
+  // Card heading; the brand name shows above it with the logo.
+  title?: string;
   // The description is what Google reads, since it can't see inside the videos.
   description: string;
   reels: string[];
@@ -22,48 +27,113 @@ type Campaign = {
 const campaigns: Campaign[] = [
   {
     brand: "City Cruises",
-    description: "Currently working as the West Coast Video Producer, capturing exciting events such as San Francisco Fleet Week and sharing history of John Wayne's yacht in Newport Beach!",
+    logo: "/logos/city-cruises.png",
+    title: "West Coast Video Producer & Host",
+    description: "Social media management, strategy, and production, capturing events such as San Francisco Fleet Week and sharing history of John Wayne's yacht in Newport Beach",
     reels: ["DcR20V3JIna", "Dc9pIyMPrl5"],
   },
   {
     brand: "San Francisco Chamber of Commerce",
-    description: "Event recap videos for the 2026 Excellence in Business Awards.",
+    logo: "/logos/sf-chamber-of-commerce.png",
+    title: "2026 Excellence in Business Awards",
+    description: "Event recap for award gala highlighting local small businesses, nonprofits, and civic leaders",
     reels: ["DfGa5bxJXMt", "DfEbkD2psdj"],
   },
   {
     brand: "Asian Art Museum",
-    description: "Recapped the opening of the museum's new Cambodian exhibit, Vishnu's Cosmic Ocean.",
+    logo: "/logos/asian-art-museum.png",
+    title: "Vishnu's Cosmic Ocean Exhibit Opening",
+    description: "Sharing Cambodian history, culture, and community for Southeast Asia's largest ancient bronze",
     reels: ["De-DusSSgbJ"],
   },
   {
     brand: "Chinese New Year Festival & Parade",
-    description: "Promote the month-long events for one of the oldest Asian cultural events in North America as well as their animal zodiac mascot merchandise.",
+    logo: "/logos/chinese-new-year-parade.png",
+    title: "Social Media Producer & Host",
+    description: "Organic social media strategy and production to promote month-long events for the largest Chinese New Year parade in the US",
     reels: ["DUuMR3iETcd", "DVeyWoQgbA7"],
   },
   {
     brand: "SFMTA & Market Street Railway",
-    description: "Reels with the San Francisco Municipal Transportation Agency and Market Street Railway, including a tourist tips video for getting around San Francisco and a visit to the San Francisco Railway Museum.",
+    logo: ["/logos/sfmta.png", "/logos/market-street-railway.png"],
+    title: "Promoting Cable Car & Street Cars",
+    description: "Organic social media production as a board member to support the Railway Museum and local businesses along the route",
     reels: ["DXdhuTgCWp7", "Db4heohJOKh"],
   },
   {
     brand: "San Francisco Symphony",
-    description: "Event recap celebrating Elim Chan, the San Francisco Symphony's first female music director.",
+    logo: "/logos/sf-symphony.png",
+    title: "Elim Chan - 1st Female Music Director",
+    description: "Luxury event recap showcasing festivities of Elim Chan's debut conducting Debussy's La Mer",
     reels: ["DZYAigaJ9YK"],
   },
   {
     brand: "Red Curtain Addict",
-    description: "Event recaps for the world premiere of The Monkey King at San Francisco Opera.",
+    logo: "/logos/red-curtain-addict.png",
+    title: "San Francisco Opera's The Monkey King",
+    description: "Encouraging younger audiences to see world premiere of innovative 'third culture' opera based on classic Chinese epic",
     reels: ["DRP0COgkquR", "DQx2Yn8kc7g"],
   },
   {
     brand: "Chinese Culture Center",
-    description: "Shared the small business shopping challenge for Chinatown's 3rd Annual Hungry Ghost Festival.",
+    logo: "/logos/chinese-culture-center.png",
+    title: "San Francisco Chinatown's 3rd Hungry Ghost Festival",
+    description: "Promoting small business shopping challenge and culture festival for San Francisco Chinatown neighborhood",
     reels: ["DM-_YntSHvT"],
   },
 ];
+
+// Structured data: the campaigns as a list of work Hannah created for each organization,
+// so search engines and AI assistants can state "Hannah made X for Y".
+// Wikipedia links identify the organizations; left out where no matching article exists.
+const organizations: Record<string, { name: string; logo: string; sameAs?: string }[]> = {
+  "City Cruises": [{ name: "City Cruises", logo: "/logos/city-cruises.png" }],
+  "San Francisco Chamber of Commerce": [{ name: "San Francisco Chamber of Commerce", logo: "/logos/sf-chamber-of-commerce.png" }],
+  "Asian Art Museum": [{ name: "Asian Art Museum", logo: "/logos/asian-art-museum.png", sameAs: "https://en.wikipedia.org/wiki/Asian_Art_Museum_(San_Francisco)" }],
+  "Chinese New Year Festival & Parade": [{ name: "San Francisco Chinese New Year Festival and Parade", logo: "/logos/chinese-new-year-parade.png", sameAs: "https://en.wikipedia.org/wiki/San_Francisco_Chinese_New_Year_Festival_and_Parade" }],
+  "SFMTA & Market Street Railway": [
+    { name: "San Francisco Municipal Transportation Agency", logo: "/logos/sfmta.png", sameAs: "https://en.wikipedia.org/wiki/San_Francisco_Municipal_Transportation_Agency" },
+    { name: "Market Street Railway", logo: "/logos/market-street-railway.png", sameAs: "https://en.wikipedia.org/wiki/Market_Street_Railway_(nonprofit)" },
+  ],
+  "San Francisco Symphony": [{ name: "San Francisco Symphony", logo: "/logos/sf-symphony.png", sameAs: "https://en.wikipedia.org/wiki/San_Francisco_Symphony" }],
+  "Red Curtain Addict": [{ name: "Red Curtain Addict", logo: "/logos/red-curtain-addict.png" }],
+  "Chinese Culture Center": [{ name: "Chinese Culture Center of San Francisco", logo: "/logos/chinese-culture-center.png", sameAs: "https://en.wikipedia.org/wiki/Chinese_Culture_Center_of_San_Francisco" }],
+};
+
+const personId = `${SITE.URL}/#person`;
+const workList = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "@id": `${SITE.URL}/work/#featured-work`,
+  name: "Featured work by Hannah Chea",
+  description: WORK.DESCRIPTION,
+  numberOfItems: campaigns.length,
+  itemListElement: await Promise.all(campaigns.map(async (campaign, i) => {
+    const thumbnail = await getImage({ src: thumbnailFor(campaign.reels[0]), width: 540, format: "jpg" });
+    return {
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "CreativeWork",
+        name: campaign.title ?? campaign.brand,
+        description: campaign.description,
+        genre: "Short-form social media video",
+        url: `https://www.instagram.com/reel/${campaign.reels[0]}/`,
+        image: new URL(thumbnail.src, Astro.site).href,
+        creator: { "@id": personId },
+        sourceOrganization: organizations[campaign.brand].map(({ logo, ...org }) => ({
+          "@type": "Organization",
+          ...org,
+          logo: new URL(logo, Astro.site).href,
+        })),
+        workExample: campaign.reels.map((code) => ({ "@type": "CreativeWork", url: `https://www.instagram.com/reel/${code}/` })),
+      },
+    };
+  })),
+};
 ---
 
-<PageLayout title={WORK.TITLE} description={WORK.DESCRIPTION}>
+<PageLayout title={WORK.TITLE} description={WORK.DESCRIPTION} schema={workList}>
   <Container>
     <div class="space-y-12">
       <h1 class="animate font-bold text-black dark:text-white text-3xl">
@@ -92,12 +162,12 @@ const campaigns: Campaign[] = [
           {campaigns.map((campaign) => (
             <li class={`snap-start shrink-0 space-y-3 ${campaign.reels.length > 1 ? "w-[300px] sm:w-[340px]" : "w-[210px] sm:w-[230px]"}`}>
               <div class={`grid gap-2 ${campaign.reels.length > 1 ? "grid-cols-2" : "grid-cols-1 w-[146px] sm:w-[166px] mx-auto"}`}>
-                {campaign.reels.map((code) => (
+                {campaign.reels.map((code, i) => (
                   <a
                     href={`https://www.instagram.com/reel/${code}/`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`Watch ${campaign.brand} reel on Instagram`}
+                    aria-label={`Watch ${campaign.brand} reel${campaign.reels.length > 1 ? ` ${i + 1} of ${campaign.reels.length}` : ""} on Instagram`}
                     class="group relative block aspect-[9/16] overflow-hidden rounded-xl bg-black"
                   >
                     <Image
@@ -115,7 +185,10 @@ const campaigns: Campaign[] = [
                   </a>
                 ))}
               </div>
-              <h3 class="font-semibold text-black dark:text-white text-lg leading-snug">{campaign.brand}</h3>
+              <OutletMark outlet={campaign.brand} logo={campaign.logo} />
+              {campaign.title && (
+                <h3 class="font-semibold text-black dark:text-white text-lg leading-snug">{campaign.title}</h3>
+              )}
               <p class="text-[16px] leading-[24px] opacity-75">{campaign.description}</p>
             </li>
           ))}
