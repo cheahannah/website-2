@@ -27,7 +27,7 @@ export const SPEAKING: Metadata = {
 
 export const WORK: Metadata = {
   TITLE: "Event Recap Videos & Social Media Content",
-  DESCRIPTION: "Event recap videos and social content by San Francisco creator Hannah Chea for City Cruises, the SF Chamber of Commerce, Asian Art Museum, and SF Symphony.",
+  DESCRIPTION: "Event recaps and social videos by San Francisco creator Hannah Chea for the Chinese New Year Parade, City Cruises, Asian Art Museum, and SF Symphony.",
 };
 
 export const PRESS: Metadata = {

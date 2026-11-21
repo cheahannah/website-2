@@ -29,10 +29,10 @@ const fullTitle = title.includes(SITE.NAME) ? title : `${title} | ${SITE.NAME}`;
 <link rel="preload" href={inter400} as="font" type="font/woff2" crossorigin/>
 <link rel="preload" href={inter600} as="font" type="font/woff2" crossorigin/>
 
-<!-- Favicon -->
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="icon" type="image/png" href="/favicon.png" />
-<link rel="apple-touch-icon" href="/favicon.png" />
+<!-- Favicon: 🦐. Google wants a square icon whose size is a multiple of 48px. -->
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
