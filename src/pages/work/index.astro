@@ -83,8 +83,8 @@ const campaigns: Campaign[] = [
 
       <div class="animate">
         <ScrollRow title="Featured work">
+          {/* Single-reel cards are a little wider than their video so the description has room; the video is centered and the text stays left-aligned. */}
           {campaigns.map((campaign) => (
-            <!-- Single-reel cards are a little wider than their video so the description has room; the video is centered and the text stays left-aligned. -->
             <li class={`snap-start shrink-0 space-y-3 ${campaign.reels.length > 1 ? "w-[300px] sm:w-[340px]" : "w-[210px] sm:w-[230px]"}`}>
               <div class={`grid gap-2 ${campaign.reels.length > 1 ? "grid-cols-2" : "grid-cols-1 w-[146px] sm:w-[166px] mx-auto"}`}>
                 {campaign.reels.map((code) => (
