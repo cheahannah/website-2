@@ -4,24 +4,35 @@ export const SITE: Site = {
   NAME: "Hannah Chea",
   URL: "https://cheahannah.com",
   EMAIL: "xirimpi@gmail.com",
+  MEDIA_KIT: "https://beacons.ai/xirimpi/mediakit",
   NUM_POSTS_ON_HOMEPAGE: 0,
   NUM_WORKS_ON_HOMEPAGE: 0,
   NUM_PROJECTS_ON_HOMEPAGE: 0,
 };
 
 export const HOME: Metadata = {
-  TITLE: "Home",
-  DESCRIPTION: "Hannah Chea's personal website to showcase her content creator and artist work.",
+  TITLE: "Hannah Chea | San Francisco Asian American Lifestyle Creator",
+  DESCRIPTION: "Hannah Chea (谢慧宁) is an Asian American lifestyle creator in San Francisco recapping events and experiences, sharing Chinatown stories, and hosting events.",
 };
 
-export const PORTFOLIO: Metadata = {
-  TITLE: "Portfolio",
-  DESCRIPTION: "Hannah Chea's collection of content creation, fashion design, and modeling work.",
+export const ABOUT: Metadata = {
+  TITLE: "About Hannah Chea (谢慧宁)",
+  DESCRIPTION: "Hannah Chea (谢慧宁) is a Chinese-Cambodian American video producer, emcee, and artist in San Francisco, Miss San Francisco Chinatown 2025, and UC Berkeley alum.",
+};
+
+export const SPEAKING: Metadata = {
+  TITLE: "Emcee, Keynote Speaker & On-Camera Host",
+  DESCRIPTION: "Hannah Chea is a San Francisco emcee, keynote speaker, and on-camera host for galas, fashion shows, and Asian American cultural events in the Bay Area.",
+};
+
+export const WORK: Metadata = {
+  TITLE: "Event Recap Videos & Social Media Content",
+  DESCRIPTION: "Event recap videos and social content by San Francisco creator Hannah Chea for City Cruises, the SF Chamber of Commerce, Asian Art Museum, and SF Symphony.",
 };
 
 export const PRESS: Metadata = {
-  TITLE: "Press",
-  DESCRIPTION: "Hannah Chea's appearances in media, interviews, and collaborations.",
+  TITLE: "Press & Media Coverage",
+  DESCRIPTION: "Hannah Chea in CNBC Make It, the San Francisco Chronicle, SFGATE, Sing Tao Daily, Harper's Bazaar Vietnam, ABC7, KTSF, and ServusTV.",
 };
 
 export const SOCIALS: Socials = [
@@ -35,7 +46,7 @@ export const SOCIALS: Socials = [
   },
   {
     NAME: "facebook",
-    HREF: "https://www.facebook.com/cheahannah", 
+    HREF: "https://www.facebook.com/xirimpi", 
   },
   { 
     NAME: "youtube",

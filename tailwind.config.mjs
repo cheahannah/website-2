@@ -8,9 +8,12 @@ export default {
   ],
   theme: {
     extend: {
+      fontSize: {
+        // Body copy size used across the site (20px).
+        body: ["20px", "30px"],
+      },
       fontFamily: {
         sans: ["Inter", ...defaultTheme.fontFamily.sans],
-        serif: ["Lora", ...defaultTheme.fontFamily.serif],
       },
     },
   },

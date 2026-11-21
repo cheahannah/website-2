@@ -1,0 +1,45 @@
+---
+// Shows the video thumbnail and only loads the YouTube player when clicked.
+type Props = {
+  id: string;
+  title: string;
+};
+
+const { id, title } = Astro.props;
+---
+
+<button
+  type="button"
+  data-youtube-id={id}
+  aria-label={`Play: ${title}`}
+  class="group relative block w-full aspect-video overflow-hidden rounded-xl bg-black"
+>
+  <img
+    src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
+    alt=""
+    loading="lazy"
+    class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+  />
+  <span class="absolute inset-0 flex items-center justify-center">
+    <span class="size-14 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center group-hover:bg-black/80 transition-colors duration-300">
+      <svg viewBox="0 0 24 24" class="size-6 fill-white translate-x-0.5"><polygon points="6 4 20 12 6 20" /></svg>
+    </span>
+  </span>
+</button>
+
+<script is:inline>
+  if (!window.__youtubeBound) {
+    window.__youtubeBound = true;
+    document.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-youtube-id]");
+      if (!button) return;
+      const iframe = document.createElement("iframe");
+      iframe.src = `https://www.youtube-nocookie.com/embed/${button.dataset.youtubeId}?autoplay=1`;
+      iframe.title = button.getAttribute("aria-label").replace(/^Play: /, "");
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+      iframe.allowFullscreen = true;
+      iframe.className = "w-full aspect-video rounded-xl";
+      button.replaceWith(iframe);
+    });
+  }
+</script>

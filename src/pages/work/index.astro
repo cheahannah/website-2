@@ -1,0 +1,134 @@
+---
+import PageLayout from "@layouts/PageLayout.astro";
+import Container from "@components/Container.astro";
+import BookingButton from "@components/BookingButton.astro";
+import ScrollRow from "@components/ScrollRow.astro";
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import { WORK, SITE } from "@consts";
+
+// Thumbnails are named after each reel's Instagram code.
+const thumbnails = import.meta.glob<{ default: ImageMetadata }>("../../assets/work/*.jpg", { eager: true });
+const thumbnailFor = (code: string) => thumbnails[`../../assets/work/${code}.jpg`].default;
+
+type Campaign = {
+  brand: string;
+  // The description is what Google reads, since it can't see inside the videos.
+  description: string;
+  reels: string[];
+};
+
+// Shown in this order in the scrolling row.
+const campaigns: Campaign[] = [
+  {
+    brand: "City Cruises",
+    description: "Currently working as the West Coast Video Producer, capturing exciting events such as San Francisco Fleet Week and sharing history of John Wayne's yacht in Newport Beach!",
+    reels: ["DcR20V3JIna", "Dc9pIyMPrl5"],
+  },
+  {
+    brand: "San Francisco Chamber of Commerce",
+    description: "Event recap videos for the 2026 Excellence in Business Awards.",
+    reels: ["DfGa5bxJXMt", "DfEbkD2psdj"],
+  },
+  {
+    brand: "Asian Art Museum",
+    description: "Recapped the opening of the museum's new Cambodian exhibit, Vishnu's Cosmic Ocean.",
+    reels: ["De-DusSSgbJ"],
+  },
+  {
+    brand: "SFMTA & Market Street Railway",
+    description: "Reels with the San Francisco Municipal Transportation Agency and Market Street Railway, including a tourist tips video for getting around San Francisco and a visit to the San Francisco Railway Museum.",
+    reels: ["DXdhuTgCWp7", "Db4heohJOKh"],
+  },
+  {
+    brand: "San Francisco Symphony",
+    description: "Event recap celebrating Elim Chan, the San Francisco Symphony's first female music director.",
+    reels: ["DZYAigaJ9YK"],
+  },
+  {
+    brand: "Red Curtain Addict",
+    description: "Event recaps for the world premiere of The Monkey King at San Francisco Opera.",
+    reels: ["DRP0COgkquR", "DQx2Yn8kc7g"],
+  },
+  {
+    brand: "Chinese Culture Center",
+    description: "Shared the small business shopping challenge for Chinatown's 3rd Annual Hungry Ghost Festival.",
+    reels: ["DM-_YntSHvT"],
+  },
+];
+---
+
+<PageLayout title={WORK.TITLE} description={WORK.DESCRIPTION}>
+  <Container>
+    <div class="space-y-12">
+      <h1 class="animate font-bold text-black dark:text-white text-3xl">
+        Social Media Content Creation
+      </h1>
+
+      <article class="animate space-y-4">
+        <p>
+          I'm a San Francisco lifestyle content creator and video producer. I write, film, host, and edit organic, social-first
+          short-form videos for brands, cultural institutions, and organizations with hidden stories and histories in the Bay Area
+          and across the West Coast.
+        </p>
+        <p>
+          I specialize in narrative, voice-over videos for my own Instagram, TikTok, and YouTube channels, and I also make
+          scripted and unscripted UGC videos delivered for your team to run wherever you like.
+        </p>
+        <p>
+          Audience demographic data, past case studies, and rates are in my
+          <a href={SITE.MEDIA_KIT} target="_blank" rel="noopener noreferrer" class="text-link">media kit</a>.
+        </p>
+      </article>
+
+      <div class="animate">
+        <ScrollRow title="Featured work">
+          {campaigns.map((campaign) => (
+            <!-- Single-reel cards are a little wider than their video so the description has room; the video is centered and the text stays left-aligned. -->
+            <li class={`snap-start shrink-0 space-y-3 ${campaign.reels.length > 1 ? "w-[300px] sm:w-[340px]" : "w-[210px] sm:w-[230px]"}`}>
+              <div class={`grid gap-2 ${campaign.reels.length > 1 ? "grid-cols-2" : "grid-cols-1 w-[146px] sm:w-[166px] mx-auto"}`}>
+                {campaign.reels.map((code) => (
+                  <a
+                    href={`https://www.instagram.com/reel/${code}/`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Watch ${campaign.brand} reel on Instagram`}
+                    class="group relative block aspect-[9/16] overflow-hidden rounded-xl bg-black"
+                  >
+                    <Image
+                      src={thumbnailFor(code)}
+                      alt=""
+                      widths={[340, 540]}
+                      sizes="170px"
+                      class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                    />
+                    <span class="absolute inset-0 flex items-center justify-center">
+                      <span class="size-11 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center group-hover:bg-black/80 transition-colors duration-300">
+                        <svg viewBox="0 0 24 24" class="size-5 fill-white translate-x-0.5"><polygon points="6 4 20 12 6 20" /></svg>
+                      </span>
+                    </span>
+                  </a>
+                ))}
+              </div>
+              <h3 class="font-semibold text-black dark:text-white text-lg leading-snug">{campaign.brand}</h3>
+              <p class="text-[16px] leading-[24px] opacity-75">{campaign.description}</p>
+            </li>
+          ))}
+        </ScrollRow>
+      </div>
+
+      <section class="animate space-y-4">
+        <h2 class="font-semibold text-black dark:text-white text-xl">Work with me</h2>
+        <p class="text-body">
+          Share your brand, campaign goals, timeline, and budget, and I'll reply with ideas and availability.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <BookingButton subject="Brand partnership inquiry">Email {SITE.EMAIL}</BookingButton>
+          <a href={SITE.MEDIA_KIT} target="_blank" rel="noopener noreferrer" class="inline-block px-5 py-2.5 rounded-full text-base font-semibold border border-black/25 dark:border-white/30 hover:opacity-55 transition-opacity duration-300 ease-in-out">
+            View media kit
+          </a>
+        </div>
+      </section>
+    </div>
+  </Container>
+</PageLayout>

@@ -7,89 +7,136 @@ import { SITE } from "@consts";
 type Props = {
   title: string;
   description: string;
+  // Extra page-specific JSON-LD.
+  schema?: Record<string, unknown>;
 };
 
-const { title, description } = Astro.props;
+const { title, description, schema } = Astro.props;
+
+// Structured data: one connected description of the site, Hannah, and this page, so search
+// engines and AI assistants treat every page and profile as the same person.
+// Keep it factual and in step with what the pages say.
+const site = SITE.URL;
+const personId = `${site}/#person`;
+const websiteId = `${site}/#website`;
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
+const isProfilePage = Astro.url.pathname === "/" || Astro.url.pathname === "/about/";
+
+const coverage = [
+  { headline: "This laid-off SF tech worker found joy in the most unexpected way", publisher: "SFGATE", datePublished: "2024-10-23", url: "https://www.sfgate.com/food/article/laid-off-sf-tech-worker-joy-oysters-19857767.php" },
+  { headline: "24-year-old was laid off from her 6-figure tech job—now she shucks oysters for parties", publisher: "CNBC Make It", datePublished: "2024-11-03", url: "https://www.cnbc.com/make-it/2024/11/03/24-year-old-was-laid-off-from-her-6-figure-tech-jobnow-she-shucks-oysters-for-parties.html" },
+  { headline: "24-Year-Old Engineer Takes Up Job Of Shucking Oysters At Parties After Being Laid Off At Previous Firm", publisher: "The Free Press Journal", datePublished: "2024-11-06", url: "https://www.freepressjournal.in/viral/24-year-old-engineer-takes-up-job-of-shucking-oysters-at-parties-after-being-laid-off-at-previous-firm" },
+  { headline: "24歲年薪百萬遭裁員　她找到這份有趣副業︰釋放壓力、自由探索更開心", publisher: "hket", url: "https://wealth.hket.com/article/3854637", inLanguage: "zh-Hant" },
+  { headline: "After tech layoffs, idled workers seek new careers and pursue passions", publisher: "San Francisco Chronicle", datePublished: "2024-11-24", url: "https://www.sfchronicle.com/bayarea/article/tech-work-layoff-career-19916406.php" },
+  { headline: "全美華埠小姐競選 肖美蘭登女皇寶座", publisher: "Sing Tao Daily", datePublished: "2025-02-16", url: "https://www.singtaousa.com/2025/02/16/news/usa/miss-chinatown-usa-pageant-xiao/", inLanguage: "zh-Hant" },
+  { headline: "NTK Đặng Trọng Minh Châu ra mắt bộ sưu tập áo dài trên đất Mỹ", publisher: "Harper's Bazaar Vietnam", datePublished: "2025-05-18", url: "https://bazaarvietnam.vn/ntk-dang-trong-minh-chau-ra-mat-bo-suu-tap-ao-dai-tren-dat-my/", inLanguage: "vi" },
+  { headline: "預算最後聽證爆滿 數百人訴求免削減", publisher: "Sing Tao Daily", datePublished: "2026-06-25", url: "https://www.singtaousa.com/2026/06/25/news/usa/budget-hearing-public-demand/", inLanguage: "zh-Hant" },
+  { headline: "Bay Area Asian Americans share how stereotypes, myths impact their lives", publisher: "ABC7 News", datePublished: "2021-05-12", url: "https://abc7news.com/post/model-minority-stereotypes-perpetual-foreigner-anti-asian-racism/10609358/" },
+];
+
+const person = {
+  "@type": "Person",
+  "@id": personId,
+  name: "Hannah Chea",
+  alternateName: ["谢慧宁", "謝慧寧", "xirimpi"],
+  givenName: "Hannah",
+  familyName: "Chea",
+  url: `${site}/`,
+  image: [
+    { "@type": "ImageObject", url: `${site}/hannah-chea.jpg`, width: 1200, height: 1200, caption: "Hannah Chea. Photo by Leo Gong." },
+    "https://upload.wikimedia.org/wikipedia/commons/d/df/Hannah_Chea_headshot_%282024%29.jpg",
+  ],
+  email: `mailto:${SITE.EMAIL}`,
+  description: "Asian American lifestyle content creator and video producer in San Francisco who recaps events and experiences and shares San Francisco Chinatown stories. Emcee, keynote speaker, on-camera host, and Miss San Francisco Chinatown 2025.",
+  jobTitle: ["Lifestyle Content Creator", "Video Producer", "Emcee", "On-Camera Host"],
+  hasOccupation: [
+    { "@type": "Occupation", name: "Content creator", description: "Produces short-form social videos and event recaps for brands and cultural institutions in San Francisco." },
+    { "@type": "Occupation", name: "Master of ceremonies", description: "Emcees galas, fashion shows, and Asian American cultural events, and gives keynote talks." },
+  ],
+  worksFor: { "@type": "Organization", name: "City Cruises" },
+  homeLocation: { "@type": "Place", name: "San Francisco, California", sameAs: "https://en.wikipedia.org/wiki/San_Francisco" },
+  nationality: { "@type": "Country", name: "United States" },
+  knowsAbout: [
+    { "@type": "Thing", name: "Chinatown, San Francisco", sameAs: "https://en.wikipedia.org/wiki/Chinatown,_San_Francisco" },
+    { "@type": "Thing", name: "Asian Americans", sameAs: "https://en.wikipedia.org/wiki/Asian_Americans" },
+    { "@type": "Thing", name: "Cambodian Americans", sameAs: "https://en.wikipedia.org/wiki/Cambodian_Americans" },
+    "Event recap videos",
+    "Lifestyle content creation",
+    "Short-form video production",
+    "Social media marketing",
+    "Event hosting",
+    "Public speaking",
+    "San Francisco history",
+    "Khmer dance",
+    "Pageantry",
+  ],
+  alumniOf: { "@type": "CollegeOrUniversity", name: "University of California, Berkeley", sameAs: "https://en.wikipedia.org/wiki/University_of_California,_Berkeley" },
+  award: "Miss San Francisco Chinatown 2025",
+  memberOf: { "@type": "Organization", name: "Market Street Railway", url: "https://www.streetcar.org/" },
+  performerIn: {
+    "@type": "TheaterEvent",
+    name: "The Rebirth of Apsara: Beyond Genocide",
+    description: "Charya Burt's dance/theatre production created to observe the 50th Anniversary of the beginning of the Khmer Rouge Genocide and to honor its survivors, the resilience of the Cambodian spirit, and to celebrate how Khmer arts has been and continues to be transmitted from generation to generation.",
+  },
+  subjectOf: coverage.map(({ publisher, ...article }) => ({
+    "@type": "NewsArticle",
+    ...article,
+    publisher: { "@type": "Organization", name: publisher },
+  })),
+  sameAs: [
+    "https://www.wikidata.org/wiki/Q139925818",
+    "https://www.instagram.com/xirimpi",
+    "https://www.tiktok.com/@xirimpi",
+    "https://www.youtube.com/@xirimpi",
+    "https://www.youtube.com/channel/UCNnSxa0u39kUHOBAl_F8Gjg",
+    "https://x.com/xirimpi",
+    "https://www.facebook.com/xirimpi",
+    "https://www.linkedin.com/in/cheahannah/",
+    "https://www.imdb.com/name/nm18331612/",
+    "https://beacons.ai/xirimpi",
+    "https://github.com/cheahannah",
+  ],
+};
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": websiteId,
+      url: `${site}/`,
+      name: "Hannah Chea",
+      alternateName: ["谢慧宁", "cheahannah.com"],
+      inLanguage: "en-US",
+      publisher: { "@id": personId },
+      about: { "@id": personId },
+    },
+    person,
+    {
+      "@type": isProfilePage ? "ProfilePage" : "WebPage",
+      "@id": `${pageUrl}#webpage`,
+      url: pageUrl,
+      name: title.includes(SITE.NAME) ? title : `${title} | ${SITE.NAME}`,
+      description,
+      inLanguage: "en-US",
+      isPartOf: { "@id": websiteId },
+      ...(isProfilePage ? { mainEntity: { "@id": personId } } : { about: { "@id": personId } }),
+    },
+  ],
+};
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <Head title={`${title} | ${SITE.NAME}`} description={description} />
-      <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Hannah Chea",
-        "givenName": "Hannah",
-        "familyName": "Chea",
-        "additionalName": "谢慧宁",
-        "gender": "female",
-        "birthPlace": "Bakersfield, California, USA",
-        "workLocation": "San Francisco, California, USA",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "San Francisco",
-          "addressRegion": "CA",
-          "addressCountry": "USA"
-        },
-        "ethnicity": "Khmer-Chinese American",
-        "nationality": "American",
-        "url": "https://cheahannah.com",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/d/df/Hannah_Chea_headshot_%282024%29.jpg",
-        "sameAs": [
-          "https://www.linkedin.com/in/cheahannah/",
-          "https://www.instagram.com/xirimpi",
-          "https://github.com/cheahannah",
-          "https://www.tiktok.com/@xirimpi",
-          "https://www.youtube.com/@xirimpi",
-          "https://x.com/xirimpi",
-          "https://www.facebook.com/xirimpi",
-          "https://www.imdb.com/name/nm18331612/"
-        ],
-        "email": "xirimpi@gmail.com",
-        "jobTitle":  ["Content Creator", "Fashion Designer", "Creative Director", "Data Analyst"],
-        "hasOccupation": [
-          {"@type": "Occupation", "name": "Content Creator", "description": "Produces engaging digital content for social media, websites, and online platforms, often focused on storytelling, education, entertainment, and brand building."},
-          {"@type": "Occupation", "name": "Host", "description": "Facilitates events, shows, or online content by engaging with audiences, guiding discussions, and creating an inviting atmosphere."},
-          {"@type": "Occupation", "name": "Performer", "description": "Engages in artistic expression through dance, theater, or other performance arts to entertain and connect with audiences."}
-        ],
-        "description": "Creator, performer, and host in San Francisco sharing Bay Area culture, Chinatown history, food, fashion, and Khmer diaspora experiences. Miss San Francisco Chinatown 2025.",
-        "knowsAbout": [
-          "Data Analysis",
-          "Content Creation",
-          "Social Media Marketing",
-          "Hosting",
-          "Presenting",
-          "Khmer Culture",
-          "Khmer Dance",
-          "Fashion Design",
-          "Modeling",
-          "San Francisco Culture",
-          "Chinatown",
-          "Asian American History",
-          "Pageantry"
-        ],
-        "alumniOf": {
-          "@type": "CollegeOrUniversity",
-          "name": "University of California, Berkeley"
-        },
-        "award": "Miss San Francisco Chinatown 2025",
-        "performerIn": {
-          "@type": "TheaterEvent",
-          "name": "The Rebirth of Apsara: Beyond Genocide",
-          "description": "Charya Burt's dance/theatre production created to observe the 50th Anniversary of the beginning of the Khmer Rouge Genocide and to honor its survivors, the resilience of the Cambodian spirit, and to celebrate how Khmer arts has been and continues to be transmitted from generation to generation."
-        },
-        "memberOf": {
-          "@type": "Organization",
-          "name": "Market Street Railway"
-        }
-      }
-    </script>
+    <Head title={title} description={description} />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
   </head>
   <body>
+    <a href="#main" class="skip-link">Skip to content</a>
     <Header />
-    <main>
+    <main id="main" tabindex="-1">
       <slot />
     </main>
     <Footer />

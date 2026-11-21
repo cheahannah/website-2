@@ -14,11 +14,16 @@ html.dark {
 html,
 body {
   @apply size-full;
-  @apply text-lg;
   @apply text-black dark:text-white;
 }
 
+/* The root size sets the scale for headings, the menu and spacing; body copy is sized separately. */
+html {
+  @apply text-lg;
+}
+
 body {
+  @apply text-body;
   @apply font-sans antialiased;
   @apply flex flex-col;
   @apply bg-stone-100 dark:bg-stone-900;
@@ -27,9 +32,18 @@ body {
 
 header {
   @apply fixed top-0 left-0 right-0 z-50 py-5;
-  @apply bg-stone-100/75 dark:bg-stone-900/25;
-  @apply backdrop-blur-sm saturate-200;
   @apply text-xl;
+}
+
+/* Blur layer that extends past the header and fades out, so there's no hard bottom edge. */
+header::before {
+  content: "";
+  @apply absolute inset-x-0 top-0 -z-10 pointer-events-none;
+  @apply bg-stone-100/75 dark:bg-stone-900/50;
+  @apply backdrop-blur-md backdrop-saturate-200;
+  height: calc(100% + 2rem);
+  -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent);
+  mask-image: linear-gradient(to bottom, black 55%, transparent);
 }
 
 main {
@@ -48,16 +62,17 @@ article {
   @apply prose-headings:font-semibold prose-p:font-sans;
   @apply prose-headings:text-black prose-headings:dark:text-white;
   @apply text-black dark:text-white;
-  @apply text-lg;
+  @apply text-body;
 }
 
-article a {
+/* Plain article links; links styled with .text-link keep the site-wide look. */
+article a:not(.text-link) {
   color: #1ec0cc !important;
   text-decoration: underline;
   text-underline-offset: 2px;
   transition: color 0.3s ease;
 }
-article a:hover {
+article a:not(.text-link):hover {
   @apply opacity-55 transition-all duration-300 ease-in-out
 }
 
@@ -70,10 +85,108 @@ article a:hover {
   @apply opacity-100 translate-y-0;
 }
 
-html #back-to-top {
-  @apply opacity-0 pointer-events-none;
+/* Small uppercase label, e.g. "As seen in". */
+.eyebrow {
+  @apply text-[11px] sm:text-xs uppercase tracking-[0.15em] opacity-60;
 }
 
-html.scrolled #back-to-top {
-  @apply opacity-100 pointer-events-auto;
+/* Press logos as quiet one-colour silhouettes. */
+.press-logo img {
+  filter: brightness(0);
+}
+
+html.dark .press-logo img {
+  filter: brightness(0) invert(1);
+}
+
+.press-logo {
+  @apply opacity-50 transition-opacity duration-300 ease-in-out;
+}
+
+a:hover .press-logo {
+  @apply opacity-80;
+}
+
+/* Inline text link that wraps naturally mid-sentence. */
+.text-link {
+  @apply underline underline-offset-4 decoration-black/25 dark:decoration-white/30;
+  @apply hover:decoration-current transition-colors duration-300 ease-in-out;
+}
+
+/* Homepage portrait that dissolves into the page background. */
+.hero-photo {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 82%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, black 15%, black 82%, transparent);
+}
+
+@media (min-width: 768px) {
+  .hero-photo {
+    -webkit-mask-image:
+      linear-gradient(to right, transparent, black 28%, black 75%, transparent),
+      linear-gradient(to bottom, transparent, black 5%, black 90%, transparent);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to right, transparent, black 28%, black 75%, transparent),
+      linear-gradient(to bottom, transparent, black 5%, black 90%, transparent);
+    mask-composite: intersect;
+  }
+}
+
+/* Thin, quiet scrollbar for horizontal card rows. */
+.scroll-track {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(0 0 0 / 0.2) transparent;
+}
+
+html.dark .scroll-track {
+  scrollbar-color: rgb(255 255 255 / 0.2) transparent;
+}
+
+/* About page portrait: fades out at the bottom on phones, and on every edge beside the text on desktop. */
+.about-photo {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 12%, black 75%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, black 12%, black 75%, transparent);
+}
+
+@media (min-width: 768px) {
+  .about-photo {
+    -webkit-mask-image:
+      linear-gradient(to right, transparent, black 15%, black 72%, transparent),
+      linear-gradient(to bottom, transparent, black 6%, black 85%, transparent);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to right, transparent, black 15%, black 72%, transparent),
+      linear-gradient(to bottom, transparent, black 6%, black 85%, transparent);
+    mask-composite: intersect;
+  }
+}
+
+/* Hidden until a keyboard user tabs to it. */
+.skip-link {
+  @apply absolute left-4 -top-20 z-[60] px-4 py-2 rounded-full text-base font-semibold;
+  @apply bg-black text-white dark:bg-white dark:text-black;
+  @apply focus:top-4 transition-[top] duration-200;
+}
+
+#main:focus {
+  outline: none;
+}
+
+/* Respect the visitor's "reduce motion" setting: no fade-ins, zooms, or smooth scrolling. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate {
+    @apply opacity-100 translate-y-0;
+  }
+
+  .group:hover img {
+    transform: none !important;
+  }
 }

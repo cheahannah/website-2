@@ -1,79 +1,217 @@
 ---
-import { getCollection } from "astro:content";
 import PageLayout from "@layouts/PageLayout.astro";
 import Container from "@components/Container.astro";
-import ArrowCard from "@components/ArrowCard.astro";
-import { PRESS } from "@consts";
-import ImageGrid from "@components/ImageGrid.astro";
+import BookingButton from "@components/BookingButton.astro";
+import OutletMark from "@components/OutletMark.astro";
+import ScrollRow from "@components/ScrollRow.astro";
+import YouTubeEmbed from "@components/YouTubeEmbed.astro";
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import { PRESS, SITE } from "@consts";
 
-const title = "Photos";
-const description = "My Photos";
+import sfgate from "../../assets/press/sfgate.jpg";
+import cnbc from "../../assets/press/cnbc.jpg";
+import fpj from "../../assets/press/fpj.jpg";
+import hket from "../../assets/press/hket.jpg";
+import chronicle from "../../assets/press/chronicle.jpg";
+import singtao2025 from "../../assets/press/singtao-2025.jpg";
+import bazaar from "../../assets/press/bazaar.jpg";
+import singtao2026 from "../../assets/press/singtao-2026.jpg";
+import abc7 from "../../assets/press/abc7.jpg";
+import servusChinatown from "../../assets/press/servustv-chinatown.jpg";
+
+type Article = {
+  outlet: string;
+  logo?: string;
+  title: string;
+  date?: string;
+  href: string;
+  image: ImageMetadata;
+  note?: string;
+};
+
+// Listed oldest first and shown newest first. Titles are shortened from the originals.
+const articles: Article[] = [
+  {
+    outlet: "SFGATE",
+    logo: "/sfgate-logo.png",
+    title: "This laid-off SF tech worker found joy in the most unexpected way",
+    date: "Oct 2024",
+    href: "https://www.sfgate.com/food/article/laid-off-sf-tech-worker-joy-oysters-19857767.php",
+    image: sfgate,
+  },
+  {
+    outlet: "CNBC Make It",
+    logo: "/cnbc-make-it-logo.png",
+    title: "Laid off from a six-figure tech job, now she shucks oysters for parties",
+    date: "Nov 2024",
+    href: "https://www.cnbc.com/make-it/2024/11/03/24-year-old-was-laid-off-from-her-6-figure-tech-jobnow-she-shucks-oysters-for-parties.html",
+    image: cnbc,
+  },
+  {
+    outlet: "The Free Press Journal",
+    logo: "/fpj-logo.png",
+    title: "24-year-old engineer takes up oyster shucking after being laid off",
+    date: "Nov 2024",
+    href: "https://www.freepressjournal.in/viral/24-year-old-engineer-takes-up-job-of-shucking-oysters-at-parties-after-being-laid-off-at-previous-firm",
+    image: fpj,
+  },
+  {
+    outlet: "hket",
+    logo: "/hket-logo.png",
+    title: "24歲年薪百萬遭裁員　她找到這份有趣副業︰釋放壓力、自由探索更開心",
+    href: "https://wealth.hket.com/article/3854637",
+    image: hket,
+  },
+  {
+    outlet: "San Francisco Chronicle",
+    logo: "/sf-chronicle-logo.png",
+    title: "After tech layoffs, idled workers seek new careers and pursue passions",
+    date: "Nov 2024",
+    href: "https://www.sfchronicle.com/bayarea/article/tech-work-layoff-career-19916406.php",
+    image: chronicle,
+  },
+  {
+    outlet: "Sing Tao Daily",
+    logo: "/sing-tao-logo.svg",
+    title: "全美華埠小姐競選 · Miss Chinatown USA crowns its 2025 queen",
+    date: "Feb 2025",
+    href: "https://www.singtaousa.com/2025/02/16/news/usa/miss-chinatown-usa-pageant-xiao/",
+    image: singtao2025,
+  },
+  {
+    outlet: "Harper's Bazaar Vietnam",
+    logo: "/bazaar-logo.png",
+    title: "Designer Đặng Trọng Minh Châu debuts an áo dài collection in the U.S.",
+    date: "May 2025",
+    href: "https://bazaarvietnam.vn/ntk-dang-trong-minh-chau-ra-mat-bo-suu-tap-ao-dai-tren-dat-my/",
+    image: bazaar,
+    note: "Runway model",
+  },
+  {
+    outlet: "Sing Tao Daily",
+    logo: "/sing-tao-logo.svg",
+    title: "預算最後聽證爆滿 · Hundreds pack San Francisco's final budget hearing",
+    date: "Jun 2026",
+    href: "https://www.singtaousa.com/2026/06/25/news/usa/budget-hearing-public-demand/",
+    image: singtao2026,
+  },
+];
+
+type Video = {
+  outlet: string;
+  logo?: string;
+  title: string;
+  date: string;
+  note?: string;
+  // Either a YouTube video ID (plays on the page) or a link out with a still image.
+  youtube?: string;
+  href?: string;
+  image?: ImageMetadata;
+};
+
+// Listed oldest first and shown newest first.
+const videos: Video[] = [
+  {
+    outlet: "ABC7 News",
+    logo: "/abc7-logo.png",
+    title: "Bay Area Asian Americans on the stereotypes that shape their lives",
+    date: "May 2021",
+    href: "https://abc7news.com/post/model-minority-stereotypes-perpetual-foreigner-anti-asian-racism/10609358/",
+    image: abc7,
+  },
+  {
+    outlet: "SFGATE",
+    logo: "/sfgate-logo.png",
+    title: "Laid-off SF tech worker turns to oyster shucking",
+    date: "Oct 2024",
+    href: "https://www.instagram.com/reel/DBhuq3Ryo_n/",
+    image: sfgate,
+  },
+  { outlet: "KTSF 26", logo: "/ktsf-logo.png", title: "13名佳麗入圍全美華埠小姐 · 13 finalists named for Miss Chinatown USA", date: "Feb 2025", youtube: "jByPIz6vDRY" },
+  { outlet: "Sing Tao TV", logo: "/sing-tao-logo.svg", title: "《星島會客室》 Interview with the 2025 Miss Chinatown USA", date: "Feb 2025", youtube: "b-bSmQKubX4" },
+  { outlet: "Infatuasian Podcast", logo: "/infatuasian-logo.png", title: "Ep. 209: Hannah Chea, Miss San Francisco Chinatown", date: "Feb 2026", youtube: "iNNPCFNdJxI" },
+  { outlet: "Golden State Warriors", title: "Gary Payton II is the Ultimate Warriors Game Show Host", date: "Apr 2026", youtube: "h7Im-bwdp6s" },
+  {
+    outlet: "ServusTV",
+    logo: "/servustv-logo.png",
+    title: "Fritz in Amerika: Fritz and Tamino Grampelhuber taste Chinatown",
+    date: "Jun 2026",
+    note: "On-camera food guide",
+    href: "https://www.servustv.com/de/page/AAH8PXAMVL5XDPIJMF6I/fritz-und-tamino-grampelhuber-erkosten-chinatown",
+    image: servusChinatown,
+  },
+  { outlet: "Sing Tao TV", logo: "/sing-tao-logo.svg", title: "透視華埠小姐70週年 · 70 years of Miss Chinatown", date: "Nov 2026", youtube: "gy2mvyssE0g" },
+];
+
+// Splits a title like "全美華埠小姐競選 · Miss Chinatown USA…" into its Chinese and English parts,
+// so the Chinese part can be marked lang="zh-Hant" for screen readers.
+const splitTitle = (title: string): [string | null, string] => {
+  const match = title.match(/^([\u3000-\u303f\u4e00-\u9fff\ufe30-\ufe4f\uff00-\uffef《》0-9]+)\s*(?:·\s*)?(.*)$/);
+  return match && /[\u4e00-\u9fff]/.test(match[1]) ? [match[1], match[2]] : [null, title];
+};
+
+const cardClass = "snap-start shrink-0 w-[260px] sm:w-[300px]";
+const imageClass = "w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]";
 ---
 
-<PageLayout title={title} description={description}>
+<PageLayout title={PRESS.TITLE} description={PRESS.DESCRIPTION}>
   <Container>
-    <section>
-      <div class="animate font-semibold text-black dark:text-white">
-        press
+    <div class="space-y-10">
+      <h1 class="animate font-bold text-black dark:text-white text-3xl">Press & Media</h1>
+
+      <div class="animate">
+        <ScrollRow title="In the news">
+          {[...articles].reverse().map((article) => (
+            <li class={cardClass}>
+              <a href={article.href} target="_blank" rel="noopener noreferrer" class="group block space-y-3">
+                <div class="overflow-hidden rounded-xl aspect-[16/10] bg-black/5 dark:bg-white/5">
+                  <Image src={article.image} alt="" widths={[400, 800]} sizes="300px" class={imageClass} />
+                </div>
+                <OutletMark outlet={article.outlet} logo={article.logo} />
+                <h3 class="font-semibold text-black dark:text-white text-lg leading-snug group-hover:opacity-70 transition-opacity duration-300">
+                  {(([zh, en]) => <>{zh && <span lang="zh-Hant">{zh}</span>}{zh && en && " · "}{en}</>)(splitTitle(article.title))}
+                </h3>
+                {(article.date || article.note) && (
+                  <p class="text-sm opacity-60">{[article.date, article.note].filter(Boolean).join(" · ")}</p>
+                )}
+              </a>
+            </li>
+          ))}
+        </ScrollRow>
       </div>
 
-      <!-- <ImageGrid
-        columns={3}
-        images={[
-          {
-            src: "/photos/photo1.jpg",
-            alt: "Roman columns",
-            href: "https://unsplash.com/photos/people-walking-near-building-during-daytime-dFLBDQQeffU?utm_content=creditShareLink&utm_medium=referral&utm_source=unsplash",
-          },
-          {
-            src: "/photos/photo2.jpg",
-            alt: "Big Ben",
-            href: "https://unsplash.com/photos/big-ben-london-MdJq0zFUwrw?utm_content=creditShareLink&utm_medium=referral&utm_source=unsplash",
-          },
-          {
-            src: "/photos/photo3.jpg",
-            alt: "Sacré-Cœur Basilica",
-            href: "https://unsplash.com/photos/a-view-of-the-inside-of-a-building-through-a-circular-window-Tp-3hrx88J4",
-          },
-          {
-            src: "/photos/photo4.jpg",
-            alt: "Eiffel Tower",
-            href: "https://unsplash.com/photos/the-eiffel-tower-towering-over-the-city-of-paris-OgPuPvPsHLM?utm_content=creditShareLink&utm_medium=referral&utm_source=unsplash",
-          },
-          {
-            src: "/photos/photo5.jpg",
-            alt: "Taj Mahal",
-            href: "https://unsplash.com/photos/taj-mahal-india-IPlPkWPJ2fo",
-          },
-          {
-            src: "/photos/photo6.jpg",
-            alt: "Colosseum",
-            href: "https://unsplash.com/photos/brown-concrete-building-under-blue-sky-during-daytime-3cyBR1rIJmA?utm_content=creditShareLink&utm_medium=referral&utm_source=unsplash",
-          },
-        ]}
-      />
+      <div class="animate">
+        <ScrollRow title="On camera">
+          {[...videos].reverse().map((video) => (
+            <li class={`${cardClass} space-y-3`}>
+              {video.youtube ? (
+                <YouTubeEmbed id={video.youtube} title={`${video.outlet}: ${video.title}`} />
+              ) : (
+                <a href={video.href} target="_blank" rel="noopener noreferrer" aria-label={`Watch on ${video.outlet}: ${video.title}`} class="group relative block aspect-video overflow-hidden rounded-xl bg-black">
+                  {video.image && <Image src={video.image} alt="" widths={[400, 800]} sizes="300px" class={imageClass} />}
+                  <span class="absolute inset-0 flex items-center justify-center">
+                    <span class="size-14 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center group-hover:bg-black/80 transition-colors duration-300">
+                      <svg viewBox="0 0 24 24" class="size-6 fill-white translate-x-0.5"><polygon points="6 4 20 12 6 20" /></svg>
+                    </span>
+                  </span>
+                </a>
+              )}
+              <OutletMark outlet={video.outlet} logo={video.logo} />
+              <h3 class="font-semibold text-black dark:text-white text-lg leading-snug">
+                {(([zh, en]) => <>{zh && <span lang="zh-Hant">{zh}</span>}{zh && en && " · "}{en}</>)(splitTitle(video.title))}
+              </h3>
+              <p class="text-sm opacity-60">{[video.date, video.note].filter(Boolean).join(" · ")}</p>
+            </li>
+          ))}
+        </ScrollRow>
+      </div>
 
-      <ImageGrid
-        columns={2}
-        images={[
-          { src: "/photos/photo1.jpg", alt: "Roman columns" },
-          { src: "/photos/photo2.jpg", alt: "Big Ben" },
-          { src: "/photos/photo3.jpg", alt: "Sacré-Cœur Basilica" },
-          { src: "/photos/photo4.jpg", alt: "Eiffel Tower" },
-        ]}
-      />
-
-      <ImageGrid
-        columns={4}
-        images={[
-          { src: "/photos/photo1.jpg", alt: "Roman columns" },
-          { src: "/photos/photo2.jpg", alt: "Big Ben" },
-          { src: "/photos/photo3.jpg", alt: "Sacré-Cœur Basilica" },
-          { src: "/photos/photo4.jpg", alt: "Eiffel Tower" },
-          { src: "/photos/photo5.jpg", alt: "Taj Mahal" },
-          { src: "/photos/photo6.jpg", alt: "Colosseum" },
-        ]}
-      /> -->
-    </section>
+      <section class="animate space-y-4">
+        <h2 class="font-semibold text-black dark:text-white text-xl">Media inquiries</h2>
+        <p class="text-body">For interviews, features, or appearances, contact via email.</p>
+        <BookingButton subject="Press inquiry">Email {SITE.EMAIL}</BookingButton>
+      </section>
+    </div>
   </Container>
 </PageLayout>

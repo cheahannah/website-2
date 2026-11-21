@@ -1,0 +1,18 @@
+---
+// Publication logo as a one-colour silhouette, followed by its name.
+type Props = {
+  outlet: string;
+  logo?: string;
+};
+
+const { outlet, logo } = Astro.props;
+---
+
+<div class="flex items-center gap-3 min-h-7">
+  {logo && (
+    <span class="press-logo flex items-center">
+      <img src={logo} alt="" class="h-6 w-auto max-w-[110px] object-contain" loading="lazy" />
+    </span>
+  )}
+  <span class="eyebrow">{outlet}</span>
+</div>

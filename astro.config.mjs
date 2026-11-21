@@ -6,5 +6,12 @@ import icon from "astro-icon";
 
 export default defineConfig({
   site: "https://cheahannah.com",
-  integrations: [mdx(), sitemap(), tailwind(), icon()],
+  // Every page address ends in "/", matching how Netlify serves them.
+  trailingSlash: "always",
+  integrations: [
+    mdx(),
+    sitemap({ lastmod: new Date() }),
+    tailwind(),
+    icon(),
+  ],
 });
