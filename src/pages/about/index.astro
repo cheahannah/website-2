@@ -1,0 +1,67 @@
+---
+import PageLayout from "@layouts/PageLayout.astro";
+import Link from "@components/Link.astro";
+import BookingButton from "@components/BookingButton.astro";
+import { Image } from "astro:assets";
+import { ABOUT, SITE } from "@consts";
+import portrait from "../../assets/hannah-chea-white-dress.jpg";
+---
+
+<PageLayout title={ABOUT.TITLE} description={ABOUT.DESCRIPTION}>
+  <!-- The photo is allowed to run wider than the other pages; the text still ends where they do. -->
+  <div class="mx-auto max-w-screen-xl md:px-5">
+    <div class="grid grid-cols-1 md:grid-cols-[6fr_5fr] gap-x-12 items-start">
+      <Image
+        src={portrait}
+        alt="Hannah Chea in a white off-the-shoulder dress"
+        widths={[640, 960, 1300]}
+        sizes="(min-width: 768px) 55vw, 100vw"
+        loading="eager"
+        class="about-photo animate block w-full aspect-[2/3] object-cover object-top -mt-16 md:-mt-12 md:col-start-1 md:row-start-1"
+      />
+
+      <!-- Overlaps the photo's faded right edge, stopping short of the raised elbow. -->
+      <div class="relative space-y-12 px-5 md:px-0 -mt-24 md:mt-0 md:-ml-24 md:mr-[min(256px,calc(50vw-384px))] md:col-start-2 md:row-start-1">
+        <h1 class="animate font-bold text-black dark:text-white text-3xl">
+          About Hannah Chea <span class="whitespace-nowrap">(<span lang="zh-Hans">谢慧宁</span>)</span>
+        </h1>
+
+        <article class="animate space-y-4 text-[16px] leading-[26px]">
+          <p>
+            As the eldest daughter of Chinese-Cambodian refugees, I am the product of my family’s migration and survival
+            from China to Cambodia and America.
+          </p>
+          <p>
+            I hold deep reverence for my personal histories and legacies. Studying at UC Berkeley taught me the weight of
+            one’s history, especially studying under Dr. Khatharya Um, the first Cambodian American woman to earn a Ph.D.,
+            and performing in the Cal Band, the marching band that Chief Justice Earl Warren (undergraduate class of 1912)
+            also played in!
+          </p>
+          <p>
+            Not long after graduating myself and working my first job as a corporate data engineer, I was laid off and
+            turned into a viral worldwide story for becoming an oyster shucker. Like an oyster turning sand into pearls,
+            I believe we can always transform life’s uncertainties and challenges into opportunities.
+          </p>
+          <p>
+            Since then, I have pivoted to a career of sharing history as a video producer, emcee host, and artist. I was
+            crowned Miss San Francisco Chinatown 2025. I performed across the US and in Phnom Penh in Master Charya Burt’s
+            production Rebirth of Apsara: Beyond Genocide. Now I serve on the board of Market Street Railway, the nonprofit
+            preserving San Francisco’s historic streetcars and cable cars.
+          </p>
+          <p>
+            Connection, culture, and creativity are values close to my heart. Please feel free to reach out and connect!
+          </p>
+        </article>
+
+        <section class="animate space-y-4">
+          <h2 class="font-semibold text-black dark:text-white text-xl">Connect with me</h2>
+          <p class="text-[16px] leading-[26px]">
+            See my <Link href="/work/">brand work</Link>, my <Link href="/speaking-hosting/">speaking</Link>,
+            or my <Link href={SITE.MEDIA_KIT} external>media kit</Link>.
+          </p>
+          <BookingButton subject="Inquiry from cheahannah.com">Email {SITE.EMAIL}</BookingButton>
+        </section>
+      </div>
+    </div>
+  </div>
+</PageLayout>

@@ -1,0 +1,116 @@
+---
+import PageLayout from "@layouts/PageLayout.astro";
+import Container from "@components/Container.astro";
+import BookingButton from "@components/BookingButton.astro";
+import { SPEAKING, SITE } from "@consts";
+
+type Engagement = {
+  name: string;
+  org: string;
+  date: string;
+  description: string;
+  href?: string;
+};
+
+// Oldest first within each section. Keep descriptions specific: who, what, where.
+const sections: { title: string; engagements: Engagement[] }[] = [
+  {
+    title: "Master of Ceremonies (Emcee)",
+    engagements: [
+      {
+        name: "Imagine Talks",
+        org: "Asian American Foundation",
+        date: "March 2025",
+        description: "Hosted 11th annual women's leadership conference bringing entrepreneurs, celebrity entertainers, and Asian-American community leaders from around the world.",
+        href: "https://www.imaginetalks.org/2024-speakers",
+      },
+      {
+        name: "Image Fashion Show: A Canvas of Culture",
+        org: "Asian American Foundation",
+        date: "September 2025",
+        description: "Hosted and directed Asian American Foundation's first-ever fashion show",
+      },
+      {
+        name: "Southeast Asian New Year Gala",
+        org: "Oakland Asian Cultural Center",
+        date: "April 2026",
+        description: "Hosted annual event to celebrate Khmer, Lao, Burmese, Thai New Year in Oakland Chinatown",
+      },
+    ],
+  },
+  {
+    title: "Keynote Speaker",
+    engagements: [
+      {
+        name: "Chinatown Hacks",
+        org: "University of San Francisco",
+        date: "March 2025",
+        description: "Delivered keynote to Chinatown's first high school hackathon.",
+      },
+    ],
+  },
+  {
+    title: "On-Camera Host",
+    engagements: [
+      {
+        name: "Fritz in Amerika! Der Teamkoch auf WM-Mission",
+        org: "ServusTV (Austria & Germany)",
+        date: "June 2026",
+        description: "Guided Austrian national team chef Fritz Grampelhuber through San Francisco Chinatown's food scene for ServusTV's travel and food series.",
+        href: "https://www.servus.com/a/au/fritz-in-amerika-der-teamkoch-auf-wm-mission-servustv-teil-2",
+      },
+    ],
+  },
+];
+---
+
+<PageLayout title={SPEAKING.TITLE} description={SPEAKING.DESCRIPTION}>
+  <Container>
+    <div class="space-y-12">
+      <h1 class="animate font-bold text-black dark:text-white text-3xl">
+        Speaking Appearances & Engagements
+      </h1>
+
+      {sections.map((section) => (
+        <section class="animate space-y-6">
+          <h2 class="font-semibold text-black dark:text-white text-xl">{section.title}</h2>
+          <ul class="flex flex-col gap-4">
+            {section.engagements.map((engagement) => (
+              <li class="p-4 rounded border border-black/15 dark:border-white/20">
+                <div class="text-sm opacity-60">{engagement.org} · {engagement.date}</div>
+                <h3 class="font-semibold text-black dark:text-white text-lg">
+                  {engagement.href ? (
+                    <a href={engagement.href} target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 decoration-black/15 dark:decoration-white/30 hover:opacity-55 transition-opacity duration-300">
+                      {engagement.name}
+                    </a>
+                  ) : engagement.name}
+                </h3>
+                <p class="text-[16px] leading-[24px] opacity-75 mt-1">{engagement.description}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+
+      <section class="animate space-y-4">
+        <h2 class="font-semibold text-black dark:text-white text-xl">What I host</h2>
+        <ul class="list-disc pl-6 text-body space-y-1">
+          <li>Galas, fundraisers, and award ceremonies</li>
+          <li>Fashion shows and runway events</li>
+          <li>Cultural festivals and community celebrations</li>
+          <li>Brand activations and product launches</li>
+          <li>On-camera hosting for TV, travel, and food segments</li>
+        </ul>
+      </section>
+
+      <section class="animate space-y-4">
+        <h2 class="font-semibold text-black dark:text-white text-xl">Book me for your event</h2>
+        <p class="text-body">
+          Tell me your event name, date, venue, expected audience size, and what you need from your host.
+          I'll get back to you with availability and rates.
+        </p>
+        <BookingButton subject="Event hosting inquiry">Email {SITE.EMAIL}</BookingButton>
+      </section>
+    </div>
+  </Container>
+</PageLayout>

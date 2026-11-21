@@ -1,167 +1,76 @@
 ---
-import { getCollection } from "astro:content";
 import Container from "@components/Container.astro";
 import PageLayout from "@layouts/PageLayout.astro";
-import Link from "@components/Link.astro";
-import { dateRange } from "@lib/utils";
-import { SITE, HOME, SOCIALS } from "@consts";
-import { Icon } from "astro-icon/components";
+import { SITE, HOME } from "@consts";
 import { Image } from "astro:assets";
+import portrait from "../assets/hannah-chea-qipao.jpg";
 
-const iconMap: Record<string, string> = {
-  instagram: "fa6-brands:instagram",
-  tiktok:    "fa6-brands:tiktok",
-  facebook:  "fa6-brands:facebook",
-  youtube:   "fa6-brands:youtube",
-  x:         "fa6-brands:x-twitter",
-  linkedin:  "fa6-brands:linkedin-in",
-  email:     "tabler:mail-filled",
-};
-
-const socialIcons = SOCIALS.map(social => ({
-  href: social.HREF,
-  icon: iconMap[social.NAME],
-}));
-
-/*
-const blog = (await getCollection("blog"))
-  .filter(post => !post.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0,SITE.NUM_POSTS_ON_HOMEPAGE);
-
-const projects = (await getCollection("projects"))
-  .filter(project => !project.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0,SITE.NUM_PROJECTS_ON_HOMEPAGE);
-
-const allwork = (await getCollection("work"))
-  .sort((a, b) => new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf())
-  .slice(0,SITE.NUM_WORKS_ON_HOMEPAGE);
-
-const work = await Promise.all(
-  allwork.map(async (item) => {
-    const { Content } = await item.render();
-    return { ...item, Content };
-  })
-);
-*/
+// Outlets without a logo file render as a text wordmark.
+const pressLogos: { name: string; logo?: string; height: string }[] = [
+  { name: "CNBC Make It", logo: "/cnbc-make-it-logo.png", height: "h-4" },
+  { name: "San Francisco Chronicle", logo: "/sf-chronicle-logo.png", height: "h-9" },
+  { name: "SFGate", logo: "/sfgate-logo.png", height: "h-5" },
+  { name: "ServusTV", logo: "/servustv-logo.png", height: "h-7" },
+  { name: "Sing Tao Daily", logo: "/sing-tao-logo.svg", height: "h-7" },
+  { name: "Infatuasian", logo: "/infatuasian-logo.png", height: "h-4" },
+  { name: "Harper's Bazaar Vietnam", logo: "/bazaar-logo.png", height: "h-6" },
+  { name: "The Free Press Journal", logo: "/fpj-logo.png", height: "h-5" },
+  { name: "KTSF 26", logo: "/ktsf-logo.png", height: "h-5" },
+  { name: "ABC7 News", logo: "/abc7-logo.png", height: "h-8" },
+];
 ---
 
 <PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
-  <Container>
-     <section>
-        <Image
-          src="/profile.png"
-          alt="Profile photo"
-          class="animate rounded-full block lg:mt-5 mt-0 lg:mb-5 mb-10 mx-auto sm:float-right sm:ml-5 sm:mb-5 lg:mr-5"
-          width={200}
-          height={200}
-        />
-    </section>
-    <h1 class="animate font-bold text-black dark:text-white text-4xl">
-      Hi! 
-      <p>I'm Hannah Chea.</p>
-    </h1>
-    <div class="space-y-16">
-      <section>
-        <article class="space-y-6">
-          <p class="animate">
-             Based in San Francisco, CA, I am a proud eldest daughter of Chinese-Khmer refugees. My work lives at the intersection of culture and creativity — from the streets of Chinatown to the stories of the Khmer diaspora. 
-          </p>
-          <p class="animate">
-            I'm here to document, celebrate, and share what makes our communities worth knowing.
-          </p>
-          <p class="animate">
-            Check out my <Link href="https://beacons.ai/xirimpi/mediakit?origin=lib" aria-label="media kit" external>media kit</Link> here.
-            <br>Or send any inquiries to <Link href="mailto:xirimpi@gmail.com" aria-label="xirimpi@gmail.com" external>xirimpi@gmail.com</Link>.
-          </p>
-        </article>
+  <section class="relative md:-mt-12 -mb-16">
+    <!-- The 3:4 frame keeps the whole photo, down past the wrist and bracelet. -->
+    <figure class="relative -mt-16 md:mt-0 md:absolute md:top-0 md:right-[max(0px,calc((100vw-48rem)/2-6rem))] md:w-[600px]">
+      <Image
+        src={portrait}
+        alt="Hannah Chea in a red qipao, San Francisco lifestyle content creator and host"
+        widths={[640, 960, 1400]}
+        sizes="(min-width: 768px) 600px, 100vw"
+        loading="eager"
+        class="hero-photo animate block w-full aspect-[3/4] object-cover object-[45%_0%]"
+      />
+      <figcaption class="absolute bottom-1 right-5 md:right-2 text-[11px] leading-none tracking-wide opacity-60">
+        Photo by Leo Gong
+      </figcaption>
+    </figure>
 
-        <!-- Social Icons -->
-        <div class="animate flex flex-wrap gap-3 mt-6">
-          {socialIcons.map(social => (
-            <a
-              href={social.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="group size-8 flex items-center justify-center rounded-full"
-            >
-              <Icon
-                name={social.icon}
-                size={25}
-                class="opacity-100 group-hover:opacity-55 transition-opacity duration-300"
-              />
-            </a>
-          ))}
-        </div>
-      </section>
+    <Container>
+      <div class="relative space-y-6 -mt-12 pt-[67px] md:mt-0 md:pt-[90px] md:max-w-[52%] md:min-h-[800px]">
+        <h1 class="animate font-semibold text-black dark:text-white text-5xl sm:text-6xl tracking-tight">
+          Hannah Chea
+        </h1>
+        <p class="animate text-body">
+          Living life & living history in San Francisco, California
+        </p>
+        <p class="animate text-body leading-relaxed">
+          I make <a href="/work/" class="text-link">social media videos</a> recapping events, and experiences.
+          I also sometimes <a href="/speaking-hosting/" class="text-link">host the events & experiences</a>.
+        </p>
+        <p class="animate text-body leading-relaxed">
+          Check out my <a href={SITE.MEDIA_KIT} target="_blank" rel="noopener noreferrer" class="text-link">media kit</a>
+          and reach out at <a href={`mailto:${SITE.EMAIL}`} class="text-link">{SITE.EMAIL}</a>
+        </p>
 
-      <!-- 
-      <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-black dark:text-white">
-            Latest posts
-          </h5>
-          <Link href="/blog">
-            See all posts
-          </Link>
+        <div class="animate pt-6 space-y-4">
+          <p class="eyebrow">As seen in</p>
+          <a href="/press/" aria-label="See press features" class="group block">
+            <ul class="flex flex-wrap items-center gap-x-6 gap-y-4">
+              {pressLogos.map(outlet => (
+                <li class="press-logo flex items-center">
+                  {outlet.logo ? (
+                    <img src={outlet.logo} alt={outlet.name} class={`${outlet.height} w-auto`} loading="lazy" />
+                  ) : (
+                    <span class="font-semibold text-base tracking-tight text-black dark:text-white">{outlet.name}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </a>
         </div>
-        <ul class="flex flex-col gap-4">
-          {blog.map(post => (
-            <li>
-              <ArrowCard entry={post} />
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-black dark:text-white">
-            Work Experience
-          </h5>
-          <Link href="/work">
-            See all work
-          </Link>
-        </div>
-        <ul class="flex flex-col space-y-4">
-          {work.map(entry => (
-            <li>
-              <div class="text-sm opacity-75">
-                {dateRange(entry.data.dateStart, entry.data.dateEnd)}
-              </div>
-              <div class="font-semibold text-black dark:text-white">
-                {entry.data.company}
-              </div>
-              <div class="text-sm opacity-75">
-                {entry.data.role}
-              </div>
-              <article>
-                <entry.Content />
-              </article>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-black dark:text-white">
-            Recent projects
-          </h5>
-          <Link href="/projects">
-            See all projects
-          </Link>
-        </div>
-        <ul class="flex flex-col gap-4">
-          {projects.map(project => (
-            <li>
-              <ArrowCard entry={project} />
-            </li>
-          ))}
-        </ul>
-      </section>
-       -->
-    </div>
-  </Container>
+      </div>
+    </Container>
+  </section>
 </PageLayout>

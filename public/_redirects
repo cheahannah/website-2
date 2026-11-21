@@ -1,0 +1,10 @@
+# Pages renamed in the menu: keep old links (and anything already shared) working.
+/hosting              /speaking-hosting/   301
+/advocacy             /speaking-hosting/   301
+/brand-partnerships   /work/               301
+
+# Removed pages and common guesses at the sitemap address.
+/portfolio            /work/               301
+/portfolio/*          /work/               301
+/rss.xml              /                    301
+/sitemap.xml          /sitemap-index.xml   301

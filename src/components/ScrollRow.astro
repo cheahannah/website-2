@@ -1,0 +1,38 @@
+---
+// A titled, horizontally scrolling row of cards with previous/next buttons.
+type Props = {
+  title: string;
+};
+
+const { title } = Astro.props;
+const buttonClass = "size-9 flex items-center justify-center rounded-full border border-black/15 dark:border-white/20 opacity-70 hover:opacity-100 transition-opacity duration-300";
+---
+
+<section class="scroll-row space-y-6">
+  <div class="flex items-center justify-between">
+    <h2 class="eyebrow">{title}</h2>
+    <div class="flex gap-2">
+      <button type="button" data-scroll-dir="-1" aria-label={`Scroll ${title} back`} class={buttonClass}>
+        <svg viewBox="0 0 24 24" class="size-4 fill-none stroke-current stroke-2"><polyline points="15 18 9 12 15 6" /></svg>
+      </button>
+      <button type="button" data-scroll-dir="1" aria-label={`Scroll ${title} forward`} class={buttonClass}>
+        <svg viewBox="0 0 24 24" class="size-4 fill-none stroke-current stroke-2"><polyline points="9 18 15 12 9 6" /></svg>
+      </button>
+    </div>
+  </div>
+  <ul data-scroll-track class="scroll-track flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4">
+    <slot />
+  </ul>
+</section>
+
+<script is:inline>
+  if (!window.__scrollRowsBound) {
+    window.__scrollRowsBound = true;
+    document.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-scroll-dir]");
+      if (!button) return;
+      const track = button.closest(".scroll-row").querySelector("[data-scroll-track]");
+      track.scrollBy({ left: Number(button.dataset.scrollDir) * track.clientWidth * 0.8 });
+    });
+  }
+</script>

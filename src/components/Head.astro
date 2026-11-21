@@ -2,12 +2,8 @@
 import "../styles/global.css";
 import "@fontsource/inter/latin-400.css";
 import "@fontsource/inter/latin-600.css";
-import "@fontsource/lora/400.css";
-import "@fontsource/lora/600.css";
 import inter400 from "@fontsource/inter/files/inter-latin-400-normal.woff2";
 import inter600 from "@fontsource/inter/files/inter-latin-600-normal.woff2";
-import lora400 from "@fontsource/lora/files/lora-latin-400-normal.woff2";
-import lora600 from "@fontsource/lora/files/lora-latin-600-normal.woff2";
 
 import { ClientRouter } from "astro:transitions";
 import { SITE } from "@consts";
@@ -19,8 +15,9 @@ interface Props {
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const { title, description, image = "/nano.png" } = Astro.props;
+const { title, description, image = "/hannah-chea-og.jpg" } = Astro.props;
 const ogImage = new URL(image, Astro.site);
+const fullTitle = title.includes(SITE.NAME) ? title : `${title} | ${SITE.NAME}`;
 ---
 
 <!-- Global Metadata -->
@@ -31,58 +28,44 @@ const ogImage = new URL(image, Astro.site);
 <!-- Font preloads -->
 <link rel="preload" href={inter400} as="font" type="font/woff2" crossorigin/>
 <link rel="preload" href={inter600} as="font" type="font/woff2" crossorigin/>
-<link rel="preload" href={lora400} as="font" type="font/woff2" crossorigin/>
-<link rel="preload" href={lora600} as="font" type="font/woff2" crossorigin/>
 
 <!-- Favicon -->
-<link rel="icon" type="image/svg+xml" href="/favicon-dark.svg" media="(prefers-color-scheme: dark)" />
-<link rel="icon" type="image/svg+xml" href="/favicon-light.svg" media="(prefers-color-scheme: light)" />
-<link rel="apple-touch-icon" href="/favicon.png" />
-
-<!-- Favicon Modern browsers (recommended) -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<!-- PNG fallback -->
 <link rel="icon" type="image/png" href="/favicon.png" />
-<!-- Apple devices -->
 <link rel="apple-touch-icon" href="/favicon.png" />
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
 
 <!-- Primary Meta Tags -->
-<title>{title} | {SITE.NAME}</title>
-<meta name="title" content={`${title} | ${SITE.NAME}`} />
+<title>{fullTitle}</title>
 <meta name="description" content={description} />
 <meta name="author" content="Hannah Chea" />
-<meta name="keywords" content="Hannah Chea, Miss San Francisco Chinatown, Miss Chinatown, Miss Asian Global, Asian pageant, content creator, Asian American, Khmer Chinese, Cambodian, Khmerican, San Francisco, fashion design, modeling, data analyst, Chinatown, Bay area, oyster shucker, influencer, social media" />
-<meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
-<meta property="og:image" content="https://cheahannah.com/profile.png" />
-<meta name="robots" content="index, follow" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content={SITE.NAME} />
-<meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={`${title} | ${SITE.NAME}`} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.url)} />
-<meta property="og:image:alt" content="Hannah Chea - Miss San Francisco Chinatown" />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Hannah Chea in a red qipao, Asian American lifestyle creator in San Francisco" />
 <meta property="og:locale" content="en_US" />
 
 <!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
+<meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@xirimpi" />
 <meta name="twitter:creator" content="@xirimpi" />
-<meta name="twitter:url" content={canonicalURL} />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image, Astro.url)} />
-<meta name="twitter:image:alt" content="Hannah Chea - Miss San Francisco Chinatown" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+<meta name="twitter:image:alt" content="Hannah Chea in a red qipao, Asian American lifestyle creator in San Francisco" />
 
 <ClientRouter  />
 
-<!-- RSS Link -->
-<link rel="alternate" type="application/rss+xml" title={SITE.NAME} href={new URL("rss.xml", Astro.site)} />
 
 <script>
   import type { TransitionBeforeSwapEvent } from "astro:transitions/client";
@@ -101,37 +84,11 @@ const ogImage = new URL(image, Astro.site);
     onScroll();
     animate();
 
-    const backToTop = document.getElementById("back-to-top");
-    backToTop?.addEventListener("click", (event) => scrollToTop(event));
-
     const backToPrev = document.getElementById("back-to-prev");
     backToPrev?.addEventListener("click", () => window.history.back());
 
-    const lightThemeButton = document.getElementById("light-theme-button");
-    lightThemeButton?.addEventListener("click", () => {
-      localStorage.setItem("theme", "light");
-      toggleTheme(false);
-    });
-
-    const darkThemeButton = document.getElementById("dark-theme-button");
-    darkThemeButton?.addEventListener("click", () => {
-      localStorage.setItem("theme", "dark");
-      toggleTheme(true);
-    });
-
-    const systemThemeButton = document.getElementById("system-theme-button");
-    systemThemeButton?.addEventListener("click", () => {
-      localStorage.setItem("theme", "system");
-      toggleTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
-    });
-
     window.matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", event => {
-        if (localStorage.theme === "system" || !localStorage.theme) {
-          toggleTheme(event.matches);
-        }
-      }
-    );
+      .addEventListener("change", event => toggleTheme(event.matches));
 
     document.addEventListener("scroll", onScroll);
   }
@@ -152,14 +109,6 @@ const ogImage = new URL(image, Astro.site);
     } else {
       document.documentElement.classList.remove("scrolled");
     }
-  }
-
-  function scrollToTop(event) {
-    event.preventDefault();
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
   }
 
 function toggleTheme(dark) {
@@ -190,14 +139,9 @@ function toggleTheme(dark) {
     document.head.removeChild(css);
   }
 
+  // Always follow the visitor's system light/dark setting.
   function preloadTheme() {
-    const userTheme = localStorage.theme;
-
-    if (userTheme === "light" || userTheme === "dark") {
-      toggleTheme(userTheme === "dark");
-    } else {
-      toggleTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
-    }
+    toggleTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
   }
 
   document.addEventListener("DOMContentLoaded", () => init());
