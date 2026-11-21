@@ -113,12 +113,12 @@ const campaigns: Campaign[] = [
           {campaigns.map((campaign) => (
             <li class={`snap-start shrink-0 space-y-3 ${campaign.reels.length > 1 ? "w-[300px] sm:w-[340px]" : "w-[210px] sm:w-[230px]"}`}>
               <div class={`grid gap-2 ${campaign.reels.length > 1 ? "grid-cols-2" : "grid-cols-1 w-[146px] sm:w-[166px] mx-auto"}`}>
-                {campaign.reels.map((code) => (
+                {campaign.reels.map((code, i) => (
                   <a
                     href={`https://www.instagram.com/reel/${code}/`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`Watch ${campaign.brand} reel on Instagram`}
+                    aria-label={`Watch ${campaign.brand} reel${campaign.reels.length > 1 ? ` ${i + 1} of ${campaign.reels.length}` : ""} on Instagram`}
                     class="group relative block aspect-[9/16] overflow-hidden rounded-xl bg-black"
                   >
                     <Image
