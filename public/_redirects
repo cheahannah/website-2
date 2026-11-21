@@ -8,3 +8,6 @@
 /portfolio/*          /work/               301
 /rss.xml              /                    301
 /sitemap.xml          /sitemap-index.xml   301
+
+# The old emoji-drawn SVG icon was replaced by PNG and ICO files.
+/favicon.svg          /favicon-192.png     301
