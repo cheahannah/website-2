@@ -4,7 +4,7 @@ import Container from "@components/Container.astro";
 import BookingButton from "@components/BookingButton.astro";
 import ScrollRow from "@components/ScrollRow.astro";
 import OutletMark from "@components/OutletMark.astro";
-import { Image } from "astro:assets";
+import { Image, getImage } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import { WORK, SITE } from "@consts";
 
@@ -82,9 +82,58 @@ const campaigns: Campaign[] = [
     reels: ["DM-_YntSHvT"],
   },
 ];
+
+// Structured data: the campaigns as a list of work Hannah created for each organization,
+// so search engines and AI assistants can state "Hannah made X for Y".
+// Wikipedia links identify the organizations; left out where no matching article exists.
+const organizations: Record<string, { name: string; logo: string; sameAs?: string }[]> = {
+  "City Cruises": [{ name: "City Cruises", logo: "/logos/city-cruises.png" }],
+  "San Francisco Chamber of Commerce": [{ name: "San Francisco Chamber of Commerce", logo: "/logos/sf-chamber-of-commerce.png" }],
+  "Asian Art Museum": [{ name: "Asian Art Museum", logo: "/logos/asian-art-museum.png", sameAs: "https://en.wikipedia.org/wiki/Asian_Art_Museum_(San_Francisco)" }],
+  "Chinese New Year Festival & Parade": [{ name: "San Francisco Chinese New Year Festival and Parade", logo: "/logos/chinese-new-year-parade.png", sameAs: "https://en.wikipedia.org/wiki/San_Francisco_Chinese_New_Year_Festival_and_Parade" }],
+  "SFMTA & Market Street Railway": [
+    { name: "San Francisco Municipal Transportation Agency", logo: "/logos/sfmta.png", sameAs: "https://en.wikipedia.org/wiki/San_Francisco_Municipal_Transportation_Agency" },
+    { name: "Market Street Railway", logo: "/logos/market-street-railway.png", sameAs: "https://en.wikipedia.org/wiki/Market_Street_Railway_(nonprofit)" },
+  ],
+  "San Francisco Symphony": [{ name: "San Francisco Symphony", logo: "/logos/sf-symphony.png", sameAs: "https://en.wikipedia.org/wiki/San_Francisco_Symphony" }],
+  "Red Curtain Addict": [{ name: "Red Curtain Addict", logo: "/logos/red-curtain-addict.png" }],
+  "Chinese Culture Center": [{ name: "Chinese Culture Center of San Francisco", logo: "/logos/chinese-culture-center.png", sameAs: "https://en.wikipedia.org/wiki/Chinese_Culture_Center_of_San_Francisco" }],
+};
+
+const personId = `${SITE.URL}/#person`;
+const workList = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "@id": `${SITE.URL}/work/#featured-work`,
+  name: "Featured work by Hannah Chea",
+  description: WORK.DESCRIPTION,
+  numberOfItems: campaigns.length,
+  itemListElement: await Promise.all(campaigns.map(async (campaign, i) => {
+    const thumbnail = await getImage({ src: thumbnailFor(campaign.reels[0]), width: 540, format: "jpg" });
+    return {
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "CreativeWork",
+        name: campaign.title ?? campaign.brand,
+        description: campaign.description,
+        genre: "Short-form social media video",
+        url: `https://www.instagram.com/reel/${campaign.reels[0]}/`,
+        image: new URL(thumbnail.src, Astro.site).href,
+        creator: { "@id": personId },
+        sourceOrganization: organizations[campaign.brand].map(({ logo, ...org }) => ({
+          "@type": "Organization",
+          ...org,
+          logo: new URL(logo, Astro.site).href,
+        })),
+        workExample: campaign.reels.map((code) => ({ "@type": "CreativeWork", url: `https://www.instagram.com/reel/${code}/` })),
+      },
+    };
+  })),
+};
 ---
 
-<PageLayout title={WORK.TITLE} description={WORK.DESCRIPTION}>
+<PageLayout title={WORK.TITLE} description={WORK.DESCRIPTION} schema={workList}>
   <Container>
     <div class="space-y-12">
       <h1 class="animate font-bold text-black dark:text-white text-3xl">
